@@ -81,11 +81,11 @@ Tarea1SD/
 
 2. Crea y activa un entorno virtual para evitar conflictos de dependencias:
 
-   
+   ```bash
   python3 -m venv venv
   source venv/bin/activate
   pip install -r requirements.txt
-
+  ```
 3. Levanta el entorno distribuido con Docker (incluye Apache Pig y Hadoop):
   ```bash
     docker compose up --build
