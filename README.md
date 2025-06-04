@@ -147,3 +147,4 @@ nota: en caso de no estar el .csv es puede visualizar desde la carpeta con su no
 Notas Finales
 
 Esta entrega demuestra el uso de herramientas de procesamiento distribuido como Apache Pig y la integración con Python para análisis visual. El proyecto se diseñó en contenedores para asegurar portabilidad y reproducibilidad del entorno de análisis.
+
