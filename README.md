@@ -71,25 +71,23 @@ Tarea1SD/
 
 ---
 
-## ⚙️ Instalación y Ejecución
+## Instalación y Ejecución
 
 1. Clona el repositorio:
-   ```bash
-    git clone https://github.com/Jairo-Ch/Tarea2SD.git
+   git clone https://github.com/Jairo-Ch/Tarea2SD.git
    cd Tarea2SD
-   ```
 
 2. Crea y activa un entorno virtual para evitar conflictos de dependencias:
 
-   ```bash
+ 
   python3 -m venv venv
   source venv/bin/activate
   pip install -r requirements.txt
-  ```
+
 3. Levanta el entorno distribuido con Docker (incluye Apache Pig y Hadoop):
-  ```bash
+  
     docker compose up --build
-  ```
+  
 
 
 Ejecución de Scripts
