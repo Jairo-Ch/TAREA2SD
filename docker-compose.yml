@@ -1,0 +1,100 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    environment:
+      POSTGRES_DB: trafico
+      POSTGRES_USER: jairo
+      POSTGRES_PASSWORD: 1234
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - red_sd
+
+  redis:
+    image: redis:7
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - red_sd
+
+  traffic_api:
+    build: ./traffic_api
+    container_name: traffic_api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./traffic_api:/app
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - red_sd
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+  pig_worker:
+    build: ./pig_env
+    container_name: pig_worker
+    tty: true
+    stdin_open: true
+    volumes:
+      - ./event_collector:/data
+    networks:
+      - red_sd
+
+# Los siguientes servicios están comentados temporalmente por problemas de espacio:
+#  namenode:
+#    image: bde2020/hadoop-namenode:2.0.0-hadoop2.7.4-java8
+#    container_name: namenode
+#    environment:
+#      - CLUSTER_NAME=demo
+#    ports:
+#      - "9870:9870"
+#      - "9000:9000"
+#    volumes:
+#      - hadoop_namenode:/hadoop/dfs/name
+#    networks:
+#      - red_sd
+
+#  datanode:
+#    image: bde2020/hadoop-datanode:2.0.0-hadoop2.7.4-java8
+#    container_name: datanode
+#    environment:
+#      - CLUSTER_NAME=demo
+#      - CORE_CONF_fs_defaultFS=hdfs://namenode:9000
+#    depends_on:
+#      - namenode
+#    volumes:
+#      - hadoop_datanode:/hadoop/dfs/data
+#    networks:
+#      - red_sd
+
+#  hive:
+#    image: bde2020/hive:2.3.2-postgresql-metastore
+#    container_name: hive
+#    environment:
+#      - HIVE_METASTORE_DB_TYPE=postgres
+#      - HIVE_EXECUTION_ENGINE=mr
+#      - HIVE_SUPPORT_CONCURRENCY=true
+#      - CORE_CONF_fs_defaultFS=hdfs://namenode:9000
+#    ports:
+#      - "10000:10000"
+#    depends_on:
+#      - namenode
+#      - datanode
+#    networks:
+#      - red_sd
+
+volumes:
+  postgres_data:
+#  hadoop_namenode:
+#  hadoop_datanode:
+
+networks:
+  red_sd:
+    driver: bridge
